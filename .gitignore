@@ -117,4 +117,5 @@ my-ssh-key.pub
 
 /shoes_parsing/driver/
 /keras-oneshot/.ipynb_checkpoints/
-
+shoes_parsing/raw_data.zip
+shoes_parsing/augmented_data_new/
