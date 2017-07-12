@@ -31,7 +31,7 @@ print(out_path)
 preset_labels = ['n04133789', 'n03680355', 'n04200800', 'n04200800', 'n03124043', 'n04120489', 'n04254777', ]
 
 def rescale_to_x(img, x):
-    img.resize((x, x))
+    img = img.resize((x, x))
     return img
 
 
