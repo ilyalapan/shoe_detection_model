@@ -7,6 +7,16 @@ debug = False
 if len(sys.argv) > 2:
     debug = sys.argv[2]
 
+def clear_out_folder(path):
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path): shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)
+
 def delete_empty(root_path):
     for f in os.listdir(root_path):
         path = root_path + f 
@@ -37,12 +47,16 @@ if not os.path.exists('train'):
     os.mkdir('train')
 else:
     print('Already exists: train')
+    clear_out_folder('train')
+
 
 if not os.path.exists('val'):
     print( 'val  does not exist, creating')
     os.mkdir('val')
 else:
     print('Already exists: val')
+        clear_out_folder('val')
+
 
 for i in range(train_range):
     folder = folders[i]
