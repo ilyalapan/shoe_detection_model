@@ -119,3 +119,4 @@ my-ssh-key.pub
 /keras-oneshot/.ipynb_checkpoints/
 shoes_parsing/raw_data.zip
 shoes_parsing/augmented_data_new/
+shoes_parsing/start.txt

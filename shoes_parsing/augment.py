@@ -22,12 +22,18 @@ INPUT_HEIGHT = 299
 
 MAX_ROTATION = 40
 MIN_BRIGHTNESS = 0.6
-MAX_SCALE_PERCENT = 170
+MIN_SCALE_PERCENT = 70
+MAX_SCALE_PERCENT = 140
 
 out_path = sys.argv[1] + '/'
 print(out_path)
 
 preset_labels = ['n04133789', 'n03680355', 'n04200800', 'n04200800', 'n03124043', 'n04120489', 'n04254777', ]
+
+def rescale_to_x(img, x):
+    img.resize((x, x))
+    return img
+
 
 def listdir_nohidden(path):
     dirs = []
@@ -73,7 +79,7 @@ def random_crop(img):
 
 
 def random_scale(img):
-    s = randint(100, MAX_SCALE_PERCENT)/100
+    s = randint(MIN_SCALE_PERCENT, MAX_SCALE_PERCENT)/100
     width, height = img.size
     img.resize((int(width*s), int(height*s)))
     return img
@@ -140,7 +146,7 @@ def augment(file, background_swap = False, use_crop = True, use_rotate = True, u
     if use_gamma:
         print('Gamma')
         img = change_brightness(img)
-    return img
+    return rescale_to_x(img,230)
 
 
 def process_folder(path):
