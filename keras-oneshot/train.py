@@ -7,9 +7,6 @@ from keras.optimizers import SGD,Adam
 from keras.losses import binary_crossentropy
 import numpy.random as rng
 import numpy as np
-from os import *
-import matplotlib.pyplot as plt
-import matplotlib.image as imshow
 from scipy.misc import imread
 from sklearn.utils import shuffle
 from skimage.transform import rescale
@@ -90,7 +87,7 @@ class Siamese_Loader:
             print(data_path)
         example = listdir(category_path)[idx]
         example_path = os.path.join(category_path, example)
-        return rescale(imread(example_path,mode = 'RGB'), 0.4347)#/255 #TODO: Remove reshape
+        return rescale(imread(example_path,mode = 'RGB'), 1)#/255 #TODO: Remove reshape
         
         
     def get_batch(self,n,s="train"):
@@ -171,7 +168,10 @@ batch_size = 32
 N_way = 20
 n_val = 250
 #siamese_net.load_weights("/home/soren/keras-oneshot/weights")
-max_epochs = 100
+with open('result.txt', "w") as f:
+    pass
+
+max_epochs = evaluate_every*2
 for i in range(1,max_epochs):
     print(i)
     (inputs,targets)=loader.get_batch(batch_size)
@@ -183,12 +183,13 @@ for i in range(1,max_epochs):
         if val_acc >= best:
             print("saving")
             siamese_net.save('/weights')
-            with open('result.txt', 'w') as f:
-                f.write(val_acc)
+            with open('result.txt', 'a') as f:
+                f.write(str(val_acc)+',' + str(i) + '\n')
             best=val_acc
 
     if i % loss_every == 0:
-        print("iteration {}, training loss: {:.2f},".format(i,loss))
+        print("iteration {",i,"}, and loss is: ", loss)
+
 
         
 
