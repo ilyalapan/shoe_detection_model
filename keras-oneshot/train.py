@@ -33,7 +33,7 @@ def b_init(shape,name=None):
     values=rng.normal(loc=0.5,scale=1e-2,size=shape)
     return K.variable(values,name=name)
 
-input_shape = (100, 100, 3)
+input_shape = (230, 230, 3)
 left_input = Input(input_shape)
 right_input = Input(input_shape)
 #build convnet to use in each siamese 'leg'
