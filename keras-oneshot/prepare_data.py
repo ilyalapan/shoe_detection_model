@@ -1,13 +1,13 @@
 import os
 import sys
 import shutil
-
+import rm_empty
 src_folder = sys.argv[1]
 debug = False
 if len(sys.argv) > 2:
     debug = sys.argv[2]
 
-def clear_out_folder(path):
+def clear_out_folder(folder):
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         try:
@@ -17,13 +17,6 @@ def clear_out_folder(path):
         except Exception as e:
             print(e)
 
-def delete_empty(root_path):
-    for f in os.listdir(root_path):
-        path = root_path + f 
-        if os.path.isdir(path):
-            if not os.listdir(path):
-                print(path)
-                os.rmdir(path)
 
 def listdir(path):
     l = []
@@ -33,7 +26,7 @@ def listdir(path):
     return l
 
 
-delete_empty(src_folder)
+rm_empty.delete_empty(src_folder)
 
 folders = listdir(src_folder)
 if debug:
@@ -55,7 +48,7 @@ if not os.path.exists('val'):
     os.mkdir('val')
 else:
     print('Already exists: val')
-        clear_out_folder('val')
+    clear_out_folder('val')
 
 
 for i in range(train_range):
