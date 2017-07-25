@@ -87,7 +87,7 @@ class Siamese_Loader:
             print(data_path)
         example = listdir(category_path)[idx]
         example_path = os.path.join(category_path, example)
-        return imread(example_path,mode = 'RGB')/255 #rescale(imread(example_path,mode = 'RGB'), 1)#/255 #TODO: Remove reshape
+        return rescale(imread(example_path,mode = 'RGB'), 0.8)/255 #imread(example_path,mode = 'RGB')/255 # #TODO: Remove reshape
         
         
     def get_batch(self,n,s="train"):
