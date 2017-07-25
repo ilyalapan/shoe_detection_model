@@ -11,7 +11,10 @@ from scipy.misc import imread
 from sklearn.utils import shuffle
 from skimage.transform import rescale
 import os
+import objgraph
 
+
+DIMENSIONS = 138
 
 def listdir(path):
     l = []
@@ -33,7 +36,7 @@ def b_init(shape,name=None):
     values=rng.normal(loc=0.5,scale=1e-2,size=shape)
     return K.variable(values,name=name)
 
-input_shape = (230, 230, 3)
+input_shape = (DIMENSIONS, DIMENSIONS, 3)
 left_input = Input(input_shape)
 right_input = Input(input_shape)
 #build convnet to use in each siamese 'leg'
@@ -87,9 +90,9 @@ class Siamese_Loader:
             print(data_path)
         example = listdir(category_path)[idx]
         example_path = os.path.join(category_path, example)
-        return rescale(imread(example_path,mode = 'RGB'), 0.8)/255 #imread(example_path,mode = 'RGB')/255 # #TODO: Remove reshape
+        return rescale(imread(example_path,mode = 'RGB'), 0.6)/255 #imread(example_path,mode = 'RGB')/255 # #TODO: Remove reshape
         
-        
+    @profile    
     def get_batch(self,n,s="train"):
         """Create batch of n pairs, half same class, half different class"""
         data_path = os.path.join(self.path,s)
@@ -161,14 +164,14 @@ class Siamese_Loader:
     
     
 
-loader = Siamese_Loader(path = '', shape = (230,230))
+loader = Siamese_Loader(path = '', shape = (DIMENSIONS,DIMENSIONS))
 print('Created the Loader object')
 
 
 #Training loop
 evaluate_every = 2000
 loss_every=50
-batch_size = 20
+batch_size = 15
 N_way = 20
 n_val = 250
 #siamese_net.load_weights("/home/soren/keras-oneshot/weights")
@@ -183,7 +186,7 @@ with open('loss.txt', 'a') as f:
     f.write('-----------------')
 
 best = 0.0001
-max_epochs = evaluate_every*20
+max_epochs = 1
 print('Started Training')
 for i in range(1,max_epochs):
     print('Batch ', i)
@@ -203,7 +206,6 @@ for i in range(1,max_epochs):
         print("iteration {",i,"}, and loss is: ", loss)
         with open('loss.txt', 'a') as f:
             f.write(str(loss)+',' + str(i) + '\n')
-
 
         
 
