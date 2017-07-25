@@ -96,7 +96,11 @@ class Siamese_Loader:
         n_classes = len(listdir(data_path))
         #select random categories by name
         categories_names = np.array(listdir(data_path))
-        categories_n = rng.choice(n_classes,size=(n,),replace=False)
+        try:
+            categories_n = rng.choice(n_classes,size=(n,),replace=False)
+        except ValueError:
+            print(data_path)
+            print(n_classes)
         categories = categories_names[categories_n]
         pairs=[np.zeros((n, self.h, self.w, 3), dtype = np.float32) for i in range(2)]
         targets=np.zeros((n,))
@@ -164,7 +168,7 @@ print('Created the Loader object')
 #Training loop
 evaluate_every = 2000
 loss_every=50
-batch_size = 32
+batch_size = 20
 N_way = 20
 n_val = 250
 #siamese_net.load_weights("/home/soren/keras-oneshot/weights")
@@ -182,6 +186,7 @@ best = 0.0001
 max_epochs = evaluate_every*20
 print('Started Training')
 for i in range(1,max_epochs):
+    print('Batch ', i)
     (inputs,targets)=loader.get_batch(batch_size)
     loss=siamese_net.train_on_batch(inputs,targets)
     if i % evaluate_every == 0:
