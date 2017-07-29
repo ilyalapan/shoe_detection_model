@@ -1,1 +1,2 @@
-# shoe_detection_model
+# Using one shot learning for identification using clothing items (shoes)
+Used one shot learning seamese network based on the one desribed here: https://sorenbouma.github.io/blog/oneshot/, for the purposes of identifying a person based on their clothing (here I used shoes specifically). Created a script to parse ASOS and ASOS Marketplace to build a database of shoes and augment the data with random crops and rotations, gamma changes and etc. Also created the training script based on the jupyter notebook provided in the blog post. 
