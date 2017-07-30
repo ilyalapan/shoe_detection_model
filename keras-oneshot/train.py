@@ -11,7 +11,10 @@ from scipy.misc import imread
 from sklearn.utils import shuffle
 from skimage.transform import rescale
 import os
+import objgraph
 
+
+DIMENSIONS = 138
 
 def listdir(path):
     l = []
@@ -33,7 +36,7 @@ def b_init(shape,name=None):
     values=rng.normal(loc=0.5,scale=1e-2,size=shape)
     return K.variable(values,name=name)
 
-input_shape = (230, 230, 3)
+input_shape = (DIMENSIONS, DIMENSIONS, 3)
 left_input = Input(input_shape)
 right_input = Input(input_shape)
 #build convnet to use in each siamese 'leg'
@@ -87,16 +90,20 @@ class Siamese_Loader:
             print(data_path)
         example = listdir(category_path)[idx]
         example_path = os.path.join(category_path, example)
-        return imread(example_path,mode = 'RGB')/255 #rescale(imread(example_path,mode = 'RGB'), 1)#/255 #TODO: Remove reshape
+        return rescale(imread(example_path,mode = 'RGB'), 0.6)/255 #imread(example_path,mode = 'RGB')/255 # #TODO: Remove reshape
         
-        
+    @profile    
     def get_batch(self,n,s="train"):
         """Create batch of n pairs, half same class, half different class"""
         data_path = os.path.join(self.path,s)
         n_classes = len(listdir(data_path))
         #select random categories by name
         categories_names = np.array(listdir(data_path))
-        categories_n = rng.choice(n_classes,size=(n,),replace=False)
+        try:
+            categories_n = rng.choice(n_classes,size=(n,),replace=False)
+        except ValueError:
+            print(data_path)
+            print(n_classes)
         categories = categories_names[categories_n]
         pairs=[np.zeros((n, self.h, self.w, 3), dtype = np.float32) for i in range(2)]
         targets=np.zeros((n,))
@@ -157,7 +164,7 @@ class Siamese_Loader:
     
     
 
-loader = Siamese_Loader(path = '', shape = (230,230))
+loader = Siamese_Loader(path = '', shape = (DIMENSIONS,DIMENSIONS))
 print('Created the Loader object')
 
 
@@ -179,10 +186,11 @@ with open('loss.txt', 'a') as f:
     f.write('-----------------')
 
 best = 0.0001
-max_epochs = evaluate_every*20
+max_epochs = 1
 print('Started Training')
 for i in range(1,max_epochs):
-    print(i)
+    print('Batch ', i)
+
     (inputs,targets)=loader.get_batch(batch_size)
     loss=siamese_net.train_on_batch(inputs,targets)
     if i % evaluate_every == 0:
@@ -199,7 +207,6 @@ for i in range(1,max_epochs):
         print("iteration {",i,"}, and loss is: ", loss)
         with open('loss.txt', 'a') as f:
             f.write(str(loss)+',' + str(i) + '\n')
-
 
         
 
