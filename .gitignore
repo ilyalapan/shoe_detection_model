@@ -109,6 +109,9 @@ my-ssh-key.pub
 /shoes_parsing/raw_data
 /keras-oneshot/train
 /keras-oneshot/val
+keras-oneshot/loss.txt
+keras-oneshot/train.txt
+
 .idea
 /shoes_parsing/backgrounds
 
@@ -120,3 +123,4 @@ my-ssh-key.pub
 shoes_parsing/raw_data.zip
 shoes_parsing/augmented_data_new/
 shoes_parsing/start.txt
+
